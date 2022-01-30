@@ -1,3 +1,8 @@
+ll gcd(ll x,ll y) 
+{ 
+	if(y==0) return x; 
+	return gcd(y,x%y); 
+}
 
 const ll M = MOD ; 
 ll fact[mxN];
@@ -47,11 +52,6 @@ void sub(ll &a, ll b) {
 	a = (a + M) % M;
 }
 
-ll gcd(ll x,ll y) 
-{ 
-	if(y==0) return x; 
-	return gcd(y,x%y); 
-}
 
 
 const ll N = 1e6 + 1;
@@ -71,6 +71,7 @@ void sieve()
 	is_prime[1]=0;
 	is_prime[0]=0;
 }
+
 
 vll phi(N);
 void phi()
@@ -97,4 +98,60 @@ void dearrange()
         else p = (p + ifact[i]) % M;
         dearr[i] = fact[i] * p % M;
     }
+}
+
+// Faster Sieve
+vector<bool> is_prime(mxN,1);
+vector<int> prime;
+void sieve()
+{
+    is_prime[0] = 0;
+    is_prime[1] = 0;
+    for(int i = 2; i < mxN; i++)
+    {
+        if(is_prime[i])
+        {
+            prime.pb(i);
+        }
+        for(int p: prime)
+        {
+            if(i*p >= mxN) break;
+            is_prime[i*p] = 0;
+            if(i%p == 0) break;
+        }
+    }
+}
+
+
+// ModInv using GCD when m is not prime but gcd(a,m) == 1
+ll gcdExtended(ll a, ll b, ll* x, ll* y)
+{
+    if (a == 0)
+    {
+        *x = 0, *y = 1;
+        return b;
+    }
+     
+    // To store results of recursive call
+    ll x1, y1;
+    ll gcd = gcdExtended(b % a, a, &x1, &y1);
+ 
+    // Update x and y using results of recursive call
+    *x = y1 - (b / a) * x1;
+    *y = x1;
+ 
+    return gcd;
+}
+
+ll modInverse(ll a, ll m)
+{
+    ll x, y;
+    ll g = gcdExtended(a, m, &x, &y);
+
+    // inverse doesn't exist
+    if (g != 1) return -1;
+
+    // m is added to handle negative x
+    ll res = (x % m + m) % m;
+    return res;
 }
