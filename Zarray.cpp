@@ -1,4 +1,25 @@
-// Z array - z[i] tells max length prefix strating from i
+
+//KMP - kmp[i] tells The longest proper prefix of pattern[0..i] which is also a suffix of pattern[0..i].
+void preprocess_kmp(string &pattern, vector<int> &kmp)
+{
+    kmp[0] = 0;
+    for (int i = 1; i < pattern.size(); i++)
+    {
+        kmp[i] = 0;
+        int length = kmp[i - 1];
+        while ((length > 0) && (pattern[i] != pattern[length]))
+        {
+            length = kmp[length - 1];
+        }
+        if (pattern[i] == pattern[length])
+        {
+            kmp[i] = length + 1;
+        }
+    }
+}
+
+
+// Z array - z[i] tells max length prefix starting from i
 vll Zarray(string s)
 {
     ll n=s.size();
@@ -50,4 +71,3 @@ vector<int> Zarray(string s)
     }
     return z;
 }
-
