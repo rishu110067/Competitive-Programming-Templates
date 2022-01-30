@@ -1,6 +1,6 @@
 // Find Lowest Common Ancestor (LCA) of two nodes in a tree in O(logn)
 
-const ll N=2e5;
+const ll N = 2e5;
 vll v[N];
 ll par[N][20];
 ll dep[N];
@@ -44,16 +44,11 @@ ll lca(ll u,ll v)
     return par[u][0];
 }        
         
-// find distance between x and y if one of them is lca
+// find distance between x and y
 ll dis(ll x,ll y)
 {
-    if(x==y) return 0;
-    if(dep[x]<dep[y]) swap(x,y);
-
-    ll d=0;
-    for(int i=19; i>=0; i--)
-        if(dep[par[x][i]]>dep[y])
-            x=par[x][i], d+=(1<<i);
-    d++;
-    return d;
+    ll z = lca(x,y);
+    ll d = dep[x] + dep[y] - 2*dep[z];
+    return d; 
 }
+
